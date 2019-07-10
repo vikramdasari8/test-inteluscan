@@ -52,12 +52,14 @@ export const AllUsers = async (request, h) => {
         status: 401
       });
     try {
-      var decoded = jwt.verify(authToken, process.env.secret);
-      console.log("Decoded Token", decoded);
+      const token = request.headers.authorization.split(' ')[1];
+      console.log('Header', request.headers.authorization, '-----', token)
+      var decoded = jwt.verify(token, process.env.secret);
+      // console.log("Decoded Token", decoded);
       const lstAllUsers = await Users.find().exec();
       return h.response(lstAllUsers);
     } catch (err) {
-      console.log("Error Decoded Token", err.message);
+      // console.log("Error Decoded Token", err.message);
       return h.response({ Message: "Token Expired" });
     }
   } catch (error) {
